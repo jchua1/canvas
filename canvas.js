@@ -9,12 +9,6 @@ var s = document.getElementById('stop');
 
 ctx.fillStyle = 'red';
 
-var clear = function() {
-    ctx.closePath();
-    ctx.clearRect(0, 0, 500, 500);
-    begin = true;
-};
-
 var requestID;
 var movement = 'right';
 var increment = 1;
@@ -24,7 +18,6 @@ img.src = 'dvd.png';
 var animate = function() {
 
     window.cancelAnimationFrame(requestID);
-    console.log(img.width);
     
     var radius = 50;
     var xcor = 100;
@@ -33,10 +26,9 @@ var animate = function() {
     var yinc = 1;
 
     var drawDot = function() {
-	//console.log(requestID);
 
 	ctx.clearRect(0, 0, c.width, c.height);
-	/*
+
 	ctx.beginPath();
 	ctx.arc(xcor, ycor, radius, 0, 2 * Math.PI);
 	ctx.stroke();
@@ -50,20 +42,6 @@ var animate = function() {
 	    ycor -= increment;
 	else if (movement == 'down')
 	    ycor += increment;
-	*/
-
-	ctx.drawImage(img, xcor, ycor);
-	xcor += xinc;
-	ycor += yinc;
-	console.log(xcor + img.naturalWidth);
-	if (xcor + img.naturalWidth == c.width)
-	    xinc = -1;
-	if (ycor + img.naturalHeight == c.height)
-	    yinc = -1;
-	if (xcor == 0)
-	    xinc = 1;
-	if (ycor == 0)
-	    yinc = 1;
 
 	requestID = window.requestAnimationFrame(drawDot);
     };
@@ -72,6 +50,8 @@ var animate = function() {
 };
 
 var growingCircle = function() {
+
+    window.cancelAnimationFrame(requestID);
 
     var radius = 50;
     var xcor = 250;
@@ -96,6 +76,39 @@ var growingCircle = function() {
 	    if (radius == 0)
 		increment = 1;
 	}
+
+	requestID = window.requestAnimationFrame(draw);
+    };
+
+    draw();
+};
+
+var dvd = function() {
+
+    window.cancelAnimationFrame(requestID);
+    
+    var radius = 50;
+    var xcor = 100;
+    var ycor = 250;
+    var xinc = 1;
+    var yinc = 1;
+
+    var draw = function() {
+
+	ctx.clearRect(0, 0, c.width, c.height);
+
+	ctx.drawImage(img, xcor, ycor);
+	xcor += xinc;
+	ycor += yinc;
+	console.log(xcor + img.naturalWidth);
+	if (xcor + img.naturalWidth == c.width)
+	    xinc = -1;
+	if (ycor + img.naturalHeight == c.height)
+	    yinc = -1;
+	if (xcor == 0)
+	    xinc = 1;
+	if (ycor == 0)
+	    yinc = 1;
 
 	requestID = window.requestAnimationFrame(draw);
     };
@@ -133,15 +146,17 @@ var slow = function() {
 	console.log("Minimum velocity reached");
 };  
 
-d.addEventListener('click', animate);
-
 gc.addEventListener('click', growingCircle);
 
+d.addEventListener('click', dvd);
+
+b.addEventListener('click', animate);
+
 s.addEventListener('click', stop)
-/*
+
 document.addEventListener('keydown', change);
 
 vup.addEventListener('click', fast);
 
 vdown.addEventListener('click', slow);
-*/
+
