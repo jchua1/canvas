@@ -8,13 +8,13 @@ var clear = function() {
     ctx.closePath();
     ctx.clearRect(0, 0, 500, 500);
     begin = true;
-}
+};
 
 var rect = function(e) {
     var x = e.offsetX;
     var y = e.offsetY;
     ctx.fillRect(x, y, 50, 100);
-}
+};
 
 var begin = true;
 
@@ -24,14 +24,14 @@ var dots = function(e) {
     if (begin) {
 	ctx.beginPath();
 	begin = false;
-    }
+    };
     ctx.lineTo(x, y);
     ctx.stroke();
     ctx.beginPath();
     ctx.arc(x, y, 10, 0, 2 * Math.PI);
     ctx.stroke();
     ctx.moveTo(x, y);
-}  
+};
     
 var circle = function(e) {
     ctx.beginPath();
@@ -42,8 +42,41 @@ var circle = function(e) {
     ctx.stroke();
     ctx.moveTo(x, y);
     ctx.closePath();
-}
+};
 
-c.addEventListener('click', dots);
+var requestID;
 
-b.addEventListener('click', clear);
+var animate = function() {
+
+    window.cancelAnimationFrame(requestID);
+    
+    var radius = 50;
+    var xcor = 10;
+
+    var drawDot = function() {
+	console.log(requestID);
+	ctx.clearRect(0, 0, c.width, c.height);
+	ctx.beginPath();
+	ctx.arc(xcor, 100, radius, 0, 2 * Math.PI);
+	ctx.stroke();
+	ctx.fill();
+	if movement == 'up' {
+	    ycor++;
+	};
+	else if movement == 'down' {
+	    ycor--;
+	};
+	requestID = window.requestAnimationFrame(drawDot);
+    };
+
+    drawDot();
+};
+
+var stop = function() {
+    console.log(requestID);
+    window.cancelAnimationFrame(requestID);
+};
+
+c.addEventListener('click', animate);
+
+b.addEventListener('click', stop);
